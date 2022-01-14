@@ -2,9 +2,14 @@ package org.springframework.samples.petclinic.vacination;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
 public class VaccinationService {
+	@Autowired
+	VaccinationRepository vaccinationRepo;
     public List<Vaccination> getAll(){
-        return null;
+        return vaccinationRepo.findAll();
     }
 
     public List<Vaccine> getAllVaccines(){
@@ -12,12 +17,17 @@ public class VaccinationService {
     }
 
     public Vaccine getVaccine(String typeName) {
-        return null;
+        return vaccinationRepo.findVaccineByName(typeName);
     }
 
     public Vaccination save(Vaccination p) throws UnfeasibleVaccinationException {
-        return null;       
+        if(p.getVaccinatedPet().getId() != p.getVaccine().getId()) {
+        	throw new UnfeasibleVaccinationException();
+        }else {
+        	return vaccinationRepo.save(p);
+        }
+    	
     }
-
+    
     
 }
